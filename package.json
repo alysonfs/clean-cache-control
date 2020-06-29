@@ -5,6 +5,9 @@
   "repository": "git@github.com:alysonfs/clean-cache-control.git",
   "author": "Alyson Souza <alysonforever@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --no-cache --watchAll"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.3",
     "@types/node": "^14.0.14",
