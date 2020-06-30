@@ -14,7 +14,7 @@ class CacheStoreSpy implements CacheStore{
   deleteCallsCount = 0
 }
 
-describe('Local save purchases', () => {
+describe('LocalSavePurchases', () => {
   test('Sould not delete cache on sut.init', () => {
     const cacheStore = new CacheStoreSpy()
     new LocalSavePurchases(cacheStore)    
