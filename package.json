@@ -6,7 +6,7 @@
   "author": "Alyson Souza <alysonforever@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest "
+    "test": "jest --no-cache --watchAll"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
