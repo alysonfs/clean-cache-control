@@ -1,6 +1,7 @@
 import { CacheStore } from '@/data/protocols/cache'
 import { LocalSavePurchases } from '@/data/usercases'
 import { SavePurchases } from '@/domain/usecases'
+import { mockPurchases } from '@/data/tests'
 
 class CacheStoreSpy implements CacheStore {
   deleteCallsCount = 0
@@ -27,16 +28,7 @@ class CacheStoreSpy implements CacheStore {
   }
 }
 
-const mockPurchases = (): Array<SavePurchases.Params> => [{
-  id: '1',
-  date: new Date(),
-  value: 50
-},{
-  id: '2',
-  date: new Date(),
-  value: 70
-}
-]
+
 
 type SutTypes = {
   sut: LocalSavePurchases
@@ -69,7 +61,7 @@ describe('LocalSavePurchases', () => {
     const { sut, cacheStore } = makeSut()
     cacheStore.simulateDeleteError()
     const purchases = mockPurchases()
-    const promise = sut.save(purchases) 
+    const promise = sut.save(purchases)
     expect(cacheStore.insertCallsCount).toBe(0)
     expect(promise).rejects.toThrow()
   });
@@ -77,7 +69,7 @@ describe('LocalSavePurchases', () => {
   test('Sould insert new cash if delete success', async () => {
     const { sut, cacheStore } = makeSut()
     const purchases = mockPurchases()
-    await sut.save(purchases )
+    await sut.save(purchases)
     expect(cacheStore.deleteCallsCount).toBe(1)
     expect(cacheStore.insertCallsCount).toBe(1)
     expect(cacheStore.insertKey).toBe('purchases')
