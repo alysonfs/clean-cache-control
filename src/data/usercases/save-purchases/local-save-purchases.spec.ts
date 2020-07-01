@@ -16,25 +16,28 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LocalSavePurchases', () => {
-  test('Sould not delete cache on sut.init', () => {
+  test('Sould not delete or insert cache on sut.init', () => {
     const { cacheStore } = makeSut()
-    expect(cacheStore.deleteCallsCount).toBe(0)
+    expect(cacheStore.messages).toEqual([])
   })
 
   test('Sould delete old cache on sut.save', async () => {
     const { sut, cacheStore } = makeSut()
     const purchases = mockPurchases()
     await sut.save(purchases)
-    expect(cacheStore.deleteCallsCount).toBe(1)
+    expect(cacheStore.messages).toEqual([
+      CacheStoreSpy.Message.delete,
+      CacheStoreSpy.Message.insert
+    ])
     expect(cacheStore.deleteKey).toBe('purchases')
   })
 
-  test('Sould not insert new cash is dele fails', () => {
+  test('Sould not insert new cash is delete fails', () => {
     const { sut, cacheStore } = makeSut()
     cacheStore.simulateDeleteError()
     const purchases = mockPurchases()
     const promise = sut.save(purchases)
-    expect(cacheStore.insertCallsCount).toBe(0)
+    expect(cacheStore.messages).toEqual([CacheStoreSpy.Message.delete])
     expect(promise).rejects.toThrow()
   });
 
@@ -42,8 +45,10 @@ describe('LocalSavePurchases', () => {
     const { sut, cacheStore } = makeSut()
     const purchases = mockPurchases()
     await sut.save(purchases)
-    expect(cacheStore.deleteCallsCount).toBe(1)
-    expect(cacheStore.insertCallsCount).toBe(1)
+    expect(cacheStore.messages).toEqual([
+      CacheStoreSpy.Message.delete,
+      CacheStoreSpy.Message.insert
+    ])
     expect(cacheStore.insertKey).toBe('purchases')
     expect(cacheStore.insertValues).toEqual(purchases)
   });
@@ -52,6 +57,10 @@ describe('LocalSavePurchases', () => {
     const { sut, cacheStore } = makeSut()
     cacheStore.simulateInsertError()
     const promise = sut.save(mockPurchases())
+    expect(cacheStore.messages).toEqual([
+      CacheStoreSpy.Message.delete,
+      CacheStoreSpy.Message.insert
+    ])
     expect(promise).rejects.toThrow()
   });
 
