@@ -45,7 +45,7 @@ describe('LocalSavePurchases', () => {
     await expect(promise).resolves.toBeFalsy()
   });
 
-  test('Sould thorw if insert thorws', async () => {
+  test('Sould thorw if insert thorws', async () => { 
     const { sut, cacheStore } = makeSut()
     cacheStore.simulateInsertError()
     const promise = sut.save(mockPurchases())
